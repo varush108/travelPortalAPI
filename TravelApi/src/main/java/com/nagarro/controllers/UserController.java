@@ -17,7 +17,7 @@ import com.nagarro.repositories.UserRepository;
 public class UserController {
   @Autowired
   private UserRepository userRepository;
-  /**
+  /** 
    * Get all users list.
    *
    * @return the list
