@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.nagarro.entities.Admins;
 import com.nagarro.entities.User;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface AdminRepository extends JpaRepository<Admins, Long> {
 	
-	Page<User> findByEmail(@Param("email") String email, Pageable pageable);
-	
+	Page<Admins> findByuserid(@Param("userid") User user, Pageable pageable);
 }

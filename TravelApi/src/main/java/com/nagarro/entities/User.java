@@ -2,11 +2,15 @@ package com.nagarro.entities;
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javax.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import com.nagarro.utils.HashMapConverter;
+
 
 @Entity
 @Table(name = "users")
@@ -25,19 +29,64 @@ public class User {
     private String email;
     @Column(name = "telephone", nullable = false)
     private String telephone;
-    @Column(name = "address", nullable = false)
-    private String address;
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = true)
     private String password;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="businessUnitId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="businessUnitId" , updatable = false)
     private BusinessUnits businessUnitId;
-    @Column(name = "created_on", nullable = false)
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+    private Set<Ticket> tickets = new HashSet<>();
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+    private Set<TicketDetails> ticketDetails = new HashSet<>();
+	@Column(name = "created_on", nullable = false)
     private Date created_on;
     @Column(name = "modified_on", nullable = true)
     private Date modified_on;
     @Column(name = "modified_by", nullable = true)
     private int modified_by;
+    @OneToOne(mappedBy = "userid")
+    private Admins admin; 
+    @Column(name = "address", nullable = false)
+    @Convert(converter = HashMapConverter.class)
+    private Map<String, Object> address;	
+    
+    
+    
+    public Set<TicketDetails> getTicketDetails() {
+		return ticketDetails;
+	}
+	public void setTicketDetails(Set<TicketDetails> ticketDetails) {
+		this.ticketDetails = ticketDetails;
+	}
+	public Set<Ticket> getTickets() {
+		return tickets;
+	}
+	public void setTickets(Set<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+    public String getBusinessUnitId() {
+    	if(businessUnitId!=null) {
+		return businessUnitId.getName();
+    	}
+    	else {
+    		return "null";
+    	}
+	}
+	public Admins getAdmin() {
+		return admin;
+	}
+	public void setAdmin(Admins admin) {
+		this.admin = admin;
+	}
+	public Map<String, Object> getAddress() {
+		return address;
+	}
+	public void setAddress(Map<String, Object> addressAttributes) {
+		this.address = addressAttributes;
+	}
+	public void setBusinessUnitId(BusinessUnits businessUnitId) {
+		this.businessUnitId = businessUnitId;
+	}
 	public long getId() {
 		return id;
 	}
@@ -74,12 +123,7 @@ public class User {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 	public String getPassword() {
 		return password;
 	}
