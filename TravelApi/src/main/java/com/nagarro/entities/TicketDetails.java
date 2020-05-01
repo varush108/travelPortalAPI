@@ -1,10 +1,13 @@
 package com.nagarro.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -36,9 +39,9 @@ public class TicketDetails {
 	private String comments;
 	
 	@Column(name= "attachements",nullable =true)
-	@Convert(converter = HashMapConverter.class)
-	private Map<String,Object> attachements;
-	
+	@ElementCollection
+	private List<String> attachements = new ArrayList<String>();
+	 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="ticketID" , insertable=true,updatable = false)
 	private Ticket ticket;
@@ -75,20 +78,25 @@ public class TicketDetails {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	public Map<String, Object> getAttachements() {
+	
+	
+	public List<String> getAttachements() {
 		return attachements;
 	}
-	public void setAttachements(Map<String, Object> attachements) {
+	public void setAttachements(List<String> attachements) {
 		this.attachements = attachements;
-	}
-	public Ticket getTicket() {
-		return ticket;
 	}
 	public void setTicket(Ticket ticket) {
 		this.ticket = ticket;
 	}
-	public User getUser() {
-		return user;
+	
+	public String getUser() {
+		if(this.user!=null) {
+				return this.user.getFirstName()+" "+this.user.getLastName();
+		
+		}
+		else 
+			return "null";
 	}
 	public void setUser(User user) {
 		this.user = user;

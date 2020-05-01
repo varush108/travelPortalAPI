@@ -28,9 +28,7 @@ public class TicketType {
     
     // Getters and Setters
     
-	public Set<Ticket> getTickets() {
-		return tickets;
-	}
+	
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
 	}

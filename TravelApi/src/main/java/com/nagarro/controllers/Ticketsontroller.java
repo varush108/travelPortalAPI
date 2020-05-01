@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 
 import com.nagarro.entities.Ticket;
+import com.nagarro.entities.TicketDetails;
+import com.nagarro.repositories.TicketDetailsRepository;
 import com.nagarro.repositories.TicketsRepository;
+import com.nagarro.utils.RequestWrapper;
 
 @RestController
 @RequestMapping("/travelApi/v1")
@@ -23,6 +26,9 @@ public class Ticketsontroller {
 	
 	@Autowired
 	private TicketsRepository ticketRepository;
+	
+	@Autowired
+	private TicketDetailsRepository ticketDetailsRepository;
 	
 	/**
 	 * Get the list of all tickets
@@ -60,7 +66,14 @@ public class Ticketsontroller {
 	 * @return the newly created ticket object
 	 */
 	@PostMapping("/tickets")
-	public Ticket createTicket(@Valid @RequestBody Ticket ticket) {
-		return ticketRepository.save(ticket);
+	public ResponseEntity<Ticket> createTicket(@RequestBody RequestWrapper requestWrapper) {
+		Ticket ticket = requestWrapper.getTicket();
+		ticketRepository.save(ticket);
+		TicketDetails details = requestWrapper.getTicketDetails();
+
+		details.setTicket(ticket);
+		ticketDetailsRepository.save(details); 
+	
+		return ResponseEntity.ok().body(ticket);
 	}
 }

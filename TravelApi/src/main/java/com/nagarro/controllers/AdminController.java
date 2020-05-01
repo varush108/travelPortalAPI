@@ -4,6 +4,8 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
@@ -63,15 +65,24 @@ public class AdminController {
   public ResponseEntity<Admins> getAdminByEmail(@RequestParam(value = "email") 
   		String email) throws ResourceAccessException{
 	  
-	  //Find the user for the corresponding email Id
-	  User user = userController.getUserByEmail(email).getBody();
+	  HttpHeaders response = new HttpHeaders();
+		response.set("Access-Control-Allow-Origin","*");
+      response.set("Access-Control-Allow-Credentials", "*");
+      response.set("Access-Control-Allow-Methods", "*");
+      response.set("Access-Control-Allow-Headers", "*");
+      User user = userController.getUserByEmail(email).getBody();
 	  
-	  // check if the user is an admin or not
-	  Admins admin =
+      try{
+    	  Admins admin =
+      
 			  adminRepository
 		            .findByuserid(user, PageRequest.of(0, 1)).getContent().get(0);
 	  
-	  return ResponseEntity.ok().body(admin);  
+	  return ResponseEntity.ok().headers(response).body(admin);  
+      }catch(IndexOutOfBoundsException ex) {
+    	  return new ResponseEntity<>(response,HttpStatus.NO_CONTENT);
+    	  
+      }
 		
   }
   

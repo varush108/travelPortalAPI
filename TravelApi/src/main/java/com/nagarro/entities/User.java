@@ -52,9 +52,7 @@ public class User {
     
     
     
-    public Set<TicketDetails> getTicketDetails() {
-		return ticketDetails;
-	}
+    
 	public void setTicketDetails(Set<TicketDetails> ticketDetails) {
 		this.ticketDetails = ticketDetails;
 	}
@@ -72,9 +70,7 @@ public class User {
     		return "null";
     	}
 	}
-	public Admins getAdmin() {
-		return admin;
-	}
+	
 	public void setAdmin(Admins admin) {
 		this.admin = admin;
 	}

@@ -1,11 +1,20 @@
 package com.nagarro.controllers;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
@@ -56,12 +65,23 @@ public class UserController {
 	 */
 	@GetMapping("/userByEmail")
 	public ResponseEntity<User> getUserByEmail(@RequestParam(value = "email") 
-			String email) throws ResourceAccessException{
-		User user =
+			String email) throws IndexOutOfBoundsException{
+		
+		HttpHeaders response = new HttpHeaders();
+		response.set("Access-Control-Allow-Origin","*");
+        response.set("Access-Control-Allow-Credentials", "*");
+        response.set("Access-Control-Allow-Methods", "*");
+        response.set("Access-Control-Allow-Headers", "*");
+		
+		try{
+			User user =
+		
 				userRepository
 				.findByEmail(email, PageRequest.of(0, 1)).getContent().get(0);
-		
-		return ResponseEntity.ok().body(user);  
+			return ResponseEntity.ok().headers(response).body(user);
+		} catch(IndexOutOfBoundsException ex) {
+			return new ResponseEntity<>(response,HttpStatus.NO_CONTENT);
+			}
 	}
 	
 	/**

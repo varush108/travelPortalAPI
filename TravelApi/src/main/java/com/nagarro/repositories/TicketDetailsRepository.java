@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.nagarro.entities.TicketDetails;
 
 @Repository
-public interface TickedDetailsRepository extends JpaRepository<TicketDetails, Long> {
+public interface TicketDetailsRepository extends JpaRepository<TicketDetails, Long> {
 
 }
