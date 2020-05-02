@@ -7,8 +7,14 @@ public class EmailUser {
 
 	private String emailAddress;
 	private String text;
-	private String attachements;
-
+	private String subject;
+	
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -21,12 +27,7 @@ public class EmailUser {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public String getAttachements() {
-		return attachements;
-	}
-	public void setAttachements(String attachements) {
-		this.attachements = attachements;
-	}
+	
 	
 	
 }

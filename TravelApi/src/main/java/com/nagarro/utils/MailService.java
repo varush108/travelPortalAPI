@@ -1,4 +1,4 @@
-package com.nagarro.service;
+package com.nagarro.utils;
 
 import javax.mail.MessagingException; 
 import javax.mail.internet.MimeMessage;
@@ -38,9 +38,10 @@ public class MailService {
 	 * This function is used to send mail without attachment.
 	 * @param user
 	 * @throws MailException
+	 * @throws MessagingException 
 	 */
 
-	public void sendEmail(EmailUser user) throws MailException {
+	public void sendEmail(String email,String subject,String text) throws MailException, MessagingException {
 
 		/*
 		 * This JavaMailSender Interface is used to send Mail in Spring Boot. This
@@ -49,15 +50,15 @@ public class MailService {
 		 * object of SimpleMailMessage as a Parameter
 		 */
 
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmailAddress());
-		mail.setSubject("Testing Mail API");
-		mail.setText("Hurray ! You have done that dude...");
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		 
+		MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, true);
+	
+		mail.setTo(email);
+		mail.setSubject(subject);
+		mail.setText(text,true);
 
-		/*
-		 * This send() contains an Object of SimpleMailMessage as an Parameter
-		 */
-		javaMailSender.send(mail);
+		javaMailSender.send(mimeMessage);
 	}
 
 	/**
