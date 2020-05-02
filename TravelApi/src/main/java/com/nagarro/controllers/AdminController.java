@@ -65,11 +65,7 @@ public class AdminController {
   public ResponseEntity<Admins> getAdminByEmail(@RequestParam(value = "email") 
   		String email) throws ResourceAccessException{
 	  
-	  HttpHeaders response = new HttpHeaders();
-		response.set("Access-Control-Allow-Origin","*");
-      response.set("Access-Control-Allow-Credentials", "*");
-      response.set("Access-Control-Allow-Methods", "*");
-      response.set("Access-Control-Allow-Headers", "*");
+
       User user = userController.getUserByEmail(email).getBody();
 	  
       try{
@@ -78,9 +74,9 @@ public class AdminController {
 			  adminRepository
 		            .findByuserid(user, PageRequest.of(0, 1)).getContent().get(0);
 	  
-	  return ResponseEntity.ok().headers(response).body(admin);  
+	  return ResponseEntity.ok().body(admin);  
       }catch(IndexOutOfBoundsException ex) {
-    	  return new ResponseEntity<>(response,HttpStatus.NO_CONTENT);
+    	  return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     	  
       }
 		

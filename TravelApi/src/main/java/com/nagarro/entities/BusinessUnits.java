@@ -19,9 +19,7 @@ public class BusinessUnits {
     private String name;
     @OneToMany(cascade=CascadeType.ALL, mappedBy="businessUnitId")
     private Set<User> user = new HashSet<>();
-	public Set<User> getUser() {
-		return user;
-	}
+	
 	public void setUser(Set<User> user) {
 		this.user = user;
 	}

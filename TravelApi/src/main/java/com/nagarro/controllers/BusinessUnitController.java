@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.ResourceAccessException;
 import com.nagarro.entities.BusinessUnits;
 import com.nagarro.repositories.BusinessUnitRepository;
+import com.nagarro.utils.ConfigParams;
 
 @RestController
 @RequestMapping("/travelApi/v1")
@@ -28,9 +29,9 @@ public class BusinessUnitController {
 	 * @return list of all the business units objects
 	 */
 	@GetMapping("/BusinessUnits")
-	public List<BusinessUnits> getAllBusinessUnits() {
+	public ResponseEntity<List<BusinessUnits>> getAllBusinessUnits() {
 		
-		return BUrepo.findAll();
+		return ResponseEntity.ok().body(BUrepo.findAll());
 	}
 	
 	/**

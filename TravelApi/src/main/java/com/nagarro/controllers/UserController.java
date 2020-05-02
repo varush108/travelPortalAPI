@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
 import com.nagarro.entities.User;
 import com.nagarro.repositories.UserRepository;
+import com.nagarro.utils.ConfigParams;
 import com.nagarro.utils.PasswordGenerator;
 
 
@@ -35,8 +36,8 @@ public class UserController {
 	 * @return the list of all the user objects or empty list if no user exist
 	*/
 	@GetMapping("/users")
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public ResponseEntity<List<User>> getAllUsers() {
+		return ResponseEntity.ok().body(userRepository.findAll());
 	}
 	
 	/**
@@ -54,7 +55,7 @@ public class UserController {
 				.orElseThrow(() -> 
 				new ResourceAccessException("User not found for id : "+ userId));    
 		
-		return ResponseEntity.ok().body(user); 
+		return ResponseEntity.ok().headers(ConfigParams.getHeaders()).body(user); 
 	}
 	
 	/**
@@ -67,20 +68,16 @@ public class UserController {
 	public ResponseEntity<User> getUserByEmail(@RequestParam(value = "email") 
 			String email) throws IndexOutOfBoundsException{
 		
-		HttpHeaders response = new HttpHeaders();
-		response.set("Access-Control-Allow-Origin","*");
-        response.set("Access-Control-Allow-Credentials", "*");
-        response.set("Access-Control-Allow-Methods", "*");
-        response.set("Access-Control-Allow-Headers", "*");
+	
 		
 		try{
 			User user =
 		
 				userRepository
 				.findByEmail(email, PageRequest.of(0, 1)).getContent().get(0);
-			return ResponseEntity.ok().headers(response).body(user);
+			return ResponseEntity.ok().body(user);
 		} catch(IndexOutOfBoundsException ex) {
-			return new ResponseEntity<>(response,HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 	}
 	
@@ -88,10 +85,19 @@ public class UserController {
 	 * Posts a new user into the database
 	 * @param user object as JSON
 	 * @return the newly created user object
-	 */
+	 */ 
+	
 	@PostMapping("/users")
-	public User createUser(@Valid @RequestBody User user) {
-		user.setPassword(PasswordGenerator.generatePassword(8));
-		return userRepository.save(user);
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+		
+		try{
+			user.setPassword(PasswordGenerator.generatePassword(8));
+		
+		 
+		return ResponseEntity.ok().body(userRepository.save(user));
+		}catch(Exception ex) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
     }
 }
