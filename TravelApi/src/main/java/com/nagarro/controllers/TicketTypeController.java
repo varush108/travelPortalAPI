@@ -62,7 +62,7 @@ public class TicketTypeController {
 	 * @return
 	 */
     @RequestMapping(value="/ticketType", method=RequestMethod.POST)
-	public TicketType createTicketType(TicketType ticketType) {
+	public TicketType createTicketType(@RequestBody TicketType ticketType) {
 		
 		return ticketTypeRepo.save(ticketType);
 		

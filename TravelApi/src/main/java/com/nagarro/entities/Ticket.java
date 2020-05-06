@@ -46,7 +46,14 @@ public class Ticket {
 		this.id = id;
 	}
 
-
+	public String getUser() {
+		 return this.user.getFirstName()+" "+this.user.getLastName();
+		
+	}
+	
+	public String getUserBusinessUnit() {
+		return this.user.getBusinessUnitId();
+	}
 
 	public void setUser(User user) {
 		this.user = user;
